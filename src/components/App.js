@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -6,6 +6,8 @@ import PopupAvatar from './PopupAvatar';
 import PopupProfile from './PopupProfile';
 import PopupCreateCard from './PopupCreateCard';
 import PopupDeleteCard from './PopupDeleteCard';
+import PopupImage from './PopupImage';
+
 
 function App() {
 
@@ -29,8 +31,15 @@ function App() {
     setIsEditAvatarPopupOpen(false)
     setIsEditProfilePopupOpen(false)
     setIsAddPlacePopupOpen(false)
+    setSelectedCard({})
   }
-  
+
+  const [selectedCard, setSelectedCard] = useState({})
+
+  function handleCardClick (card){
+    setSelectedCard(card);
+  }
+
   return (
     <div className="page">
       <Header />
@@ -38,6 +47,7 @@ function App() {
         onEditProfile={handleEditProfileClick} 
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick}
+        onCardClick={handleCardClick}
         //isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen
       />
       <Footer />
@@ -45,6 +55,11 @@ function App() {
       <PopupProfile isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}/>
       <PopupCreateCard isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}/>
       <PopupDeleteCard isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}/>
+      <PopupImage 
+        onClose={closeAllPopups}
+        card={selectedCard} 
+        handleCardClick={handleCardClick}
+      />
     </div>
   );
 }
