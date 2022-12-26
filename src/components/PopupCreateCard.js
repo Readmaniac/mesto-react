@@ -1,8 +1,14 @@
 import PopupWithForm from "./PopupWithForm"
 
-function PopupCreateCard() {
+function PopupCreateCard(props) {
   return (
-    <PopupWithForm name="card" title="Новое место" buttonName="Создать">
+    <PopupWithForm 
+      name="card" 
+      title="Новое место" 
+      buttonName="Создать" 
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+    >
       <input 
         type="text" 
         placeholder="Название" 

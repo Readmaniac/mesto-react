@@ -1,8 +1,14 @@
 import PopupWithForm from "./PopupWithForm"
 
-function PopupAvatar() {
+function PopupAvatar(props) {
   return (
-    <PopupWithForm name="avatar" title="Обновить аватар" buttonName="Сохранить">
+    <PopupWithForm 
+      name="avatar" 
+      title="Обновить аватар" 
+      buttonName="Сохранить"
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+    >
       <input 
       type="url" 
       placeholder="Ссылка на картинку" 

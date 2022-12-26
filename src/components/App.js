@@ -2,26 +2,35 @@ import { useState } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
+import PopupAvatar from './PopupAvatar';
+import PopupProfile from './PopupProfile';
+import PopupCreateCard from './PopupCreateCard';
+import PopupDeleteCard from './PopupDeleteCard';
 
 function App() {
 
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
+
+  function handleEditAvatarClick(){
+    setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen)
+  }
+
   function handleEditProfileClick(){
-    const popupProfile = document.querySelector('.popup-profile');
-    popupProfile.classList.add('popup_opened')
+    setIsEditProfilePopupOpen(!isEditProfilePopupOpen)
   }
 
   function handleAddPlaceClick(){
-    const popupCard = document.querySelector('.popup-card');
-    popupCard.classList.add('popup_opened')
+    setIsAddPlacePopupOpen(!isAddPlacePopupOpen)
   }
 
-
-
-  function handleEditAvatarClick(){
-    const popupAvatar = document.querySelector('.popup-avatar');
-    popupAvatar.classList.add('popup_opened')
+  function closeAllPopups(){
+    setIsEditAvatarPopupOpen(false)
+    setIsEditProfilePopupOpen(false)
+    setIsAddPlacePopupOpen(false)
   }
-
+  
   return (
     <div className="page">
       <Header />
@@ -32,7 +41,10 @@ function App() {
         //isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen
       />
       <Footer />
-      
+      <PopupAvatar isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}/>
+      <PopupProfile isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}/>
+      <PopupCreateCard isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}/>
+      <PopupDeleteCard isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}/>
     </div>
   );
 }

@@ -1,8 +1,14 @@
 import PopupWithForm from "./PopupWithForm"
 
-function ProfilePopup() {
+function PopupProfile(props) {
   return (
-    <PopupWithForm name="profile" title="Редактировать профиль" buttonName="Сохранить">
+    <PopupWithForm 
+      name="profile" 
+      title="Редактировать профиль" 
+      buttonName="Сохранить"
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+    >
       <input 
         type="text" 
         placeholder="Жак-Ив Кусто" 
@@ -32,4 +38,4 @@ function ProfilePopup() {
   )
 }
 
-export default ProfilePopup
+export default PopupProfile

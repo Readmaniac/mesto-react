@@ -1,6 +1,6 @@
 import avatar from '../images/Avatar.svg';
 
-function Profile({handleAddPlaceClick, handleEditAvatarClick, handleEditProfileClick}) {
+function Profile({handleAddPlaceClick, onEditAvatar, handleEditProfileClick}) {
   return (
     <div className="profile">
       <div className="profile__conteiner">
@@ -8,9 +8,8 @@ function Profile({handleAddPlaceClick, handleEditAvatarClick, handleEditProfileC
             src={avatar} 
             className="profile__avatar" 
             alt = "Аватар" 
-            
           />
-          <button className="profile__btn" onClick={handleEditAvatarClick}></button>
+          <button className="profile__btn" onClick={onEditAvatar}></button>
           <div className="profile__info">
             <h1 className="profile__title">Жак-Ив Кусто</h1>
             <button 
