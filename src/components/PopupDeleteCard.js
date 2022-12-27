@@ -1,7 +1,7 @@
 import PopupWithForm from "./PopupWithForm"
 
 function PopupDeleteCard(props) {
-  return(
+  return (
     <PopupWithForm 
     name="deletecard" 
     title="Вы уверены?" 

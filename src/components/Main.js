@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
-import PicturePopup from './PicturePopup';
 import avatar from '../images/Avatar.svg'
 import api from '../utils/Api';
 import Card from './Card';
-
-
-
 
 function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
 
@@ -40,7 +36,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
   },[])
   
   return(
-    <>
+    <main>
       <section className="profile">
         <div className="profile__conteiner">
             <img 
@@ -73,8 +69,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
           <Card key={card._id} card={card} onCardClick={onCardClick}/>
         ))}
       </section>
-    </>
-
+    </main>
   )
 }
 

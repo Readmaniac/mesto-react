@@ -1,6 +1,8 @@
 function PopupWithForm(props) {
   return(
-    <div className={`popup popup-${props.name} ${props.isOpen && "popup_opened"}`}>
+    <div 
+      className={`popup popup-${props.name} ${props.isOpen && "popup_opened"}`}
+    >
       <div className="overlay" onClick={props.onClose}></div>
       <form className="form">
         <button type="button" className="popup__close-icon" onClick={props.onClose}></button>
@@ -8,7 +10,7 @@ function PopupWithForm(props) {
         {props.children}
         <button className="form__save" type="submit" disabled>{props.buttonName}</button>
       </form>
-      </div>
+    </div>
   )
 }
 

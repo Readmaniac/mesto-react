@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -48,7 +48,6 @@ function App() {
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick}
         onCardClick={handleCardClick}
-        //isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen
       />
       <Footer />
       <PopupAvatar isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}/>

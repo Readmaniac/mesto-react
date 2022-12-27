@@ -1,6 +1,9 @@
 function PopupImage({card, onClose, handleCardClick}){
   return (
-    <div className={`picture popup ${(card.link) && "popup_opened"}`} id="image">
+    <div 
+      className={`picture popup ${(card.link) && "popup_opened"}`} 
+      id="image"
+    >
         <div className="overlay picture__overlay" onClick={onClose}></div> 
         <div className="picture__container">
           <button 
