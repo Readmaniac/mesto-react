@@ -14,7 +14,7 @@ function PopupImage({card, onClose, handleCardClick}){
           ></button>
           <img 
             src={card.link} 
-            alt="" 
+            alt={card.name} 
             className="picture__image"
             onClick={handleCardClick}
           />

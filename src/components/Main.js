@@ -8,33 +8,21 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
   const [userAvatar, setUserAvatar] = useState(avatar);
   const [userName, setUserName] = useState('Жак-Ив Кусто');
   const [userDescription, setUserDescription] = useState('Исследователь океана');
-
-  useEffect(()=> {
-    api
-    .getUsersInfo()
-    .then((userData) => {
-      setUserAvatar(userData.avatar);
-      setUserName(userData.name);
-      setUserDescription(userData.about);
-    })
-    .catch((err) => {
-      console.log(`Ошибка: ${err}`);
-    });
-  },[])
-
   const [cards, setCards] = useState([]);
 
   useEffect(()=> {
-    api
-    .getAllCards()
-    .then((allCards) => {
+    Promise.all([api.getAllCards(), api.getUsersInfo()])
+    .then(([allCards, userData]) => {
+      setUserAvatar(userData.avatar);
+      setUserName(userData.name);
+      setUserDescription(userData.about);
       setCards(allCards)
     })
     .catch((err) => {
       console.log(`Ошибка: ${err}`);
     });
   },[])
-  
+
   return(
     <main>
       <section className="profile">

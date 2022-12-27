@@ -8,7 +8,7 @@ function Card({card, onCardClick}) {
     <div className="elements__container">
       <img 
         src={card.link} 
-        alt= "" 
+        alt={card.name} 
         className="elements__image"
         onClick={handleClick}
       />
