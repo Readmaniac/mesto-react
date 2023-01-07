@@ -16,6 +16,7 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
+  const [isDeleteCardPopupOpen, setisDeleteCardPopupOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState({})
   const [currentUser, setCurrentUser] = useState(
     {
@@ -56,6 +57,10 @@ function App() {
     setSelectedCard(card);
   }
 
+  function handleDeleteClick() {
+    setisDeleteCardPopupOpen(!isDeleteCardPopupOpen)
+  }
+
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
@@ -70,7 +75,7 @@ function App() {
         <PopupAvatar isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}/>
         <PopupProfile isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}/>
         <PopupCreateCard isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}/>
-        <PopupDeleteCard onClose={closeAllPopups}/>
+        <PopupDeleteCard isOpen={isDeleteCardPopupOpen} onClose={closeAllPopups}/>
         <PopupImage 
           onClose={closeAllPopups}
           card={selectedCard} 
