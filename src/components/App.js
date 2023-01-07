@@ -18,6 +18,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
   const [isDeleteCardPopupOpen, setisDeleteCardPopupOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState({})
+  const [cards, setCards] = useState([]);
   const [currentUser, setCurrentUser] = useState(
     {
       name: "Жак-Ив Кусто",
@@ -27,11 +28,15 @@ function App() {
   )
 
   useEffect(() => {
-      api.getUsersInfo()
-        .then((userData) => {
-          setCurrentUser(userData)
-        })
-  }, [])
+    Promise.all([api.getAllCards(), api.getUsersInfo()])
+    .then(([allCards, userData]) => {
+      setCards(allCards);
+      setCurrentUser(userData);
+    })
+    .catch((err) => {
+      console.log(`Ошибка: ${err}`);
+    });
+}, [])
   
 //Попап для смены аватара
   function handleEditAvatarClick(){
@@ -57,9 +62,20 @@ function App() {
     setSelectedCard(card);
   }
 
+//Добавить в нужное место для вызова попапа подтверждения удаления
   function handleDeleteClick() {
     setisDeleteCardPopupOpen(!isDeleteCardPopupOpen)
   }
+
+  function handleCardLike(card) {
+    // Снова проверяем, есть ли уже лайк на этой карточке
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    });
+} 
 
   return (
     <div className="page">
@@ -70,6 +86,8 @@ function App() {
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
+          onCardLike={handleCardLike}
+          cards={cards}
         />
         <Footer />
         <PopupAvatar isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}/>

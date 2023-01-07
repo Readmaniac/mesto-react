@@ -3,21 +3,9 @@ import api from '../utils/Api';
 import Card from './Card';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
+function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike, cards}) {
 
   const currentUser = React.useContext(CurrentUserContext);
-
-  const [cards, setCards] = useState([]);
-
-  useEffect(()=> {
-    Promise.all([api.getAllCards()])
-    .then(([allCards]) => {
-      setCards(allCards)
-    })
-    .catch((err) => {
-      console.log(`Ошибка: ${err}`);
-    });
-  },[]);
 
   return(
     <main>
@@ -49,7 +37,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
       </section>
       <section className="elements">
         {cards.map(card => (
-          <Card key={card._id} card={card} onCardClick={onCardClick}/>
+          <Card key={card._id} card={card} onCardClick={onCardClick} onCardLike={onCardLike}/>
         ))}
       </section>
     </main>
