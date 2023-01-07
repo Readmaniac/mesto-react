@@ -1,4 +1,5 @@
 function Card({card, onCardClick}) {
+  /* const isOwn = card.owner._id === currentUser._id; */
 
   function handleClick() {
     onCardClick(card);
@@ -12,6 +13,8 @@ function Card({card, onCardClick}) {
         className="elements__image"
         onClick={handleClick}
       />
+      {/* {isOwn && <button className='button_del' onClick={handleDeleteClick} />}  */}
+
       <button className="elements__delete" type="button"></button>
       <div className="elements__content">
         <p className="elements__name" aria-placeholder="Название">{card.name} </p>

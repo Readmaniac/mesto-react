@@ -1,47 +1,42 @@
-import { useEffect, useState } from 'react';
-import avatar from '../images/Avatar.svg'
+import React, { useContext, useEffect, useState } from 'react';
 import api from '../utils/Api';
 import Card from './Card';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
 
-  const [userAvatar, setUserAvatar] = useState(avatar);
-  const [userName, setUserName] = useState('Жак-Ив Кусто');
-  const [userDescription, setUserDescription] = useState('Исследователь океана');
+  const currentUser = React.useContext(CurrentUserContext);
+
   const [cards, setCards] = useState([]);
 
   useEffect(()=> {
-    Promise.all([api.getAllCards(), api.getUsersInfo()])
-    .then(([allCards, userData]) => {
-      setUserAvatar(userData.avatar);
-      setUserName(userData.name);
-      setUserDescription(userData.about);
+    Promise.all([api.getAllCards()])
+    .then(([allCards]) => {
       setCards(allCards)
     })
     .catch((err) => {
       console.log(`Ошибка: ${err}`);
     });
-  },[])
+  },[]);
 
   return(
     <main>
       <section className="profile">
         <div className="profile__conteiner">
             <img 
-              src={userAvatar} 
+              src={currentUser.avatar}
               className="profile__avatar" 
               alt = "Аватар" 
-              
             />
             <button className="profile__btn" onClick={onEditAvatar}></button>
             <div className="profile__info">
-              <h1 className="profile__title">{userName}</h1>
+              <h1 className="profile__title">{currentUser.name}</h1>
               <button 
                 className="profile__edit-button" 
                 type="button"
                 onClick={onEditProfile}
               ></button>
-              <p className="profile__subtitle">{userDescription}</p>
+              <p className="profile__subtitle">{currentUser.about}</p>
             </div>
           </div>
             <button 
