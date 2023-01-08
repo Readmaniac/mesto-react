@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import PopupWithForm from "./PopupWithForm"
 
-function PopupAvatar(props) {
+function EditAvatarPopup(props) {
 
   const avatarLinkRef = React.useRef();
 
@@ -35,4 +35,4 @@ function PopupAvatar(props) {
   )
 }
 
-export default PopupAvatar
+export default EditAvatarPopup

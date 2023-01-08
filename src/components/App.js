@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupAvatar from './PopupAvatar';
-import PopupProfile from './PopupProfile';
-import PopupCreateCard from './PopupCreateCard';
+import EditAvatarPopup from './EditAvatarPopup';
+import EditProfilePopup from './EditProfilePopup';
+import AddPlacePopup from './AddPlacePopup';
 import PopupDeleteCard from './PopupDeleteCard';
 import PopupImage from './PopupImage';
 import api from '../utils/Api';
@@ -27,7 +27,7 @@ function App() {
     }
   )
 
-  useEffect(() => {
+  React.useEffect(() => {
     Promise.all([api.getAllCards(), api.getUsersInfo()])
     .then(([allCards, userData]) => {
       setCards(allCards);
@@ -36,8 +36,8 @@ function App() {
     .catch((err) => {
       console.log(`Ошибка: ${err}`);
     });
-}, [cards, currentUser])
-  
+}, [])
+
 //Попап для смены аватара
   function handleEditAvatarClick(){
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen)
@@ -57,7 +57,7 @@ function App() {
     setIsAddPlacePopupOpen(false)
     setSelectedCard({})
   }
-
+//посмотреть большое изображение из карточки
   function handleCardClick (card){
     setSelectedCard(card);
   }
@@ -82,26 +82,24 @@ function App() {
     api.changeLikeCardStatus(card._id, !isLiked).
       then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-    })
-    .catch((err) => {
-      console.log(`Ошибка: ${err}`);
-    });
-} 
-
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
+  }
+//меняем инфо в профайле пользователя
   function handleUpdateUser(userInfoProfile) {
     api.setUserInfo(userInfoProfile)
       .then((userInfo) => {
-        console.log(userInfo);
         setCurrentUser(userInfo);
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
       });
-      closeAllPopups();
+    closeAllPopups();
   }
-
+//меняем аватар
   function handleUpdateAvatar(avatarLink){
-    console.log(avatarLink);
     api.editUserAvatar(avatarLink)
       .then((userInfo) => {
         setCurrentUser(userInfo);
@@ -109,8 +107,20 @@ function App() {
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
       });
-      closeAllPopups();
+    closeAllPopups();
   }
+//добавляем карточку
+  function handleAddPlaceSubmit(card){
+    api.addCard(card)
+      .then((newCard) => {
+        setCards((cardsList) => [newCard, ...cardsList])
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
+    closeAllPopups();
+  }
+  
 
   return (
     <div className="page">
@@ -126,18 +136,25 @@ function App() {
           cards={cards}
         />
         <Footer />
-        <PopupAvatar 
+        <EditAvatarPopup 
           isOpen={isEditAvatarPopupOpen} 
           onClose={closeAllPopups} 
           onUpdateAvatar={handleUpdateAvatar}
         />
-        <PopupProfile 
+        <EditProfilePopup 
           isOpen={isEditProfilePopupOpen} 
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
         />
-        <PopupCreateCard isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}/>
-        <PopupDeleteCard isOpen={isDeleteCardPopupOpen} onClose={closeAllPopups}/>
+        <AddPlacePopup 
+          isOpen={isAddPlacePopupOpen} 
+          onClose={closeAllPopups}
+          onAddPlace={handleAddPlaceSubmit}
+        />
+        <PopupDeleteCard 
+          isOpen={isDeleteCardPopupOpen} 
+          onClose={closeAllPopups}
+        />
         <PopupImage 
           onClose={closeAllPopups}
           card={selectedCard} 

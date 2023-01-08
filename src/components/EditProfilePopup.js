@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import PopupWithForm from "./PopupWithForm"
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function PopupProfile(props) {
+function EditProfilePopup(props) {
   const currentUser = React.useContext(CurrentUserContext);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -69,4 +69,4 @@ function PopupProfile(props) {
   )
 }
 
-export default PopupProfile
+export default EditProfilePopup
