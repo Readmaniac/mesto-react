@@ -65,9 +65,13 @@ function App() {
 //Добавить в нужное место для вызова попапа подтверждения удаления
   function handleCardDelete(card) {
     //setisDeleteCardPopupOpen(!isDeleteCardPopupOpen) <- открывает попап дял подтверждения удаления карточки
-    api.removeCard(card._id).then((newCard) => {
-      setCards((state) => state.filter((c) => c._id !== card._id));
-    });
+    api.removeCard(card._id)
+      .then(() => {
+        setCards((state) => state.filter((c) => c._id !== card._id));
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
   }
 
   function handleCardLike(card) {
@@ -75,14 +79,37 @@ function App() {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-      console.log(newCard);
+    api.changeLikeCardStatus(card._id, !isLiked).
+      then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    })
+    .catch((err) => {
+      console.log(`Ошибка: ${err}`);
     });
 } 
 
-  function handleUpdateUser() {
-    
+  function handleUpdateUser(userInfoProfile) {
+    api.setUserInfo(userInfoProfile)
+      .then((userInfo) => {
+        console.log(userInfo);
+        setCurrentUser(userInfo);
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
+      closeAllPopups();
+  }
+
+  function handleUpdateAvatar(avatarLink){
+    console.log(avatarLink);
+    api.editUserAvatar(avatarLink)
+      .then((userInfo) => {
+        setCurrentUser(userInfo);
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
+      closeAllPopups();
   }
 
   return (
@@ -99,11 +126,15 @@ function App() {
           cards={cards}
         />
         <Footer />
-        <PopupAvatar isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}/>
+        <PopupAvatar 
+          isOpen={isEditAvatarPopupOpen} 
+          onClose={closeAllPopups} 
+          onUpdateAvatar={handleUpdateAvatar}
+        />
         <PopupProfile 
-        isOpen={isEditProfilePopupOpen} 
-        onClose={closeAllPopups}
-        onUpdateUser={handleUpdateUser}
+          isOpen={isEditProfilePopupOpen} 
+          onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}
         />
         <PopupCreateCard isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}/>
         <PopupDeleteCard isOpen={isDeleteCardPopupOpen} onClose={closeAllPopups}/>

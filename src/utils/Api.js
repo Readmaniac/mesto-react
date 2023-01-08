@@ -49,13 +49,13 @@ class Api {
   }
 
 // Редактирование информации о пользователе через попап
-  editUserInfo(data) {
+  setUserInfo(data) {
     return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
-          name: data.name,
-          about: data.link
+        name: data.name,
+        about: data.about,
       })
     })
     .then(res => this.#onResponce(res));
@@ -67,7 +67,7 @@ class Api {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
-          avatar: data.link
+        avatar: data.avatar
       })
     })
     .then(res => this.#onResponce(res));

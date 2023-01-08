@@ -4,13 +4,8 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function PopupProfile(props) {
   const currentUser = React.useContext(CurrentUserContext);
-  const [name, setName] = useState(currentUser.name);
-  const [description, setDescription] = useState(currentUser.about);
-
-  React.useEffect(() => {
-    setName(currentUser.name);
-    setDescription(currentUser.about);
-  }, [currentUser]); 
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
 
   function handleChangeName(e) {
     setName(e.target.value);
@@ -20,15 +15,16 @@ function PopupProfile(props) {
     setDescription(e.target.value);
   }
 
+  React.useEffect(() => {
+    setName(currentUser.name);
+    setDescription(currentUser.about);
+  }, [currentUser]); 
+
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
-  
-    // Передаём значения управляемых компонентов во внешний обработчик
-    props.onUpdateUser({
-      name,
-      about: description,
-    });
+      // Передаём значения управляемых компонентов во внешний обработчик
+    props.onUpdateUser({name, about: description,});
   } 
 
   return (
@@ -38,6 +34,7 @@ function PopupProfile(props) {
       buttonName="Сохранить"
       isOpen={props.isOpen}
       onClose={props.onClose}
+      onSubmit={handleSubmit}
     >
       <input 
         type="text" 
