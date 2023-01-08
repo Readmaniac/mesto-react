@@ -36,7 +36,7 @@ function App() {
     .catch((err) => {
       console.log(`Ошибка: ${err}`);
     });
-}, [])
+}, [cards, currentUser])
   
 //Попап для смены аватара
   function handleEditAvatarClick(){
@@ -63,8 +63,11 @@ function App() {
   }
 
 //Добавить в нужное место для вызова попапа подтверждения удаления
-  function handleDeleteClick() {
-    setisDeleteCardPopupOpen(!isDeleteCardPopupOpen)
+  function handleCardDelete(card) {
+    //setisDeleteCardPopupOpen(!isDeleteCardPopupOpen) <- открывает попап дял подтверждения удаления карточки
+    api.removeCard(card._id).then((newCard) => {
+      setCards((state) => state.filter((c) => c._id !== card._id));
+    });
   }
 
   function handleCardLike(card) {
@@ -73,9 +76,14 @@ function App() {
     
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+      console.log(newCard);
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
     });
 } 
+
+  function handleUpdateUser() {
+    
+  }
 
   return (
     <div className="page">
@@ -87,11 +95,16 @@ function App() {
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
           onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
           cards={cards}
         />
         <Footer />
         <PopupAvatar isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}/>
-        <PopupProfile isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}/>
+        <PopupProfile 
+        isOpen={isEditProfilePopupOpen} 
+        onClose={closeAllPopups}
+        onUpdateUser={handleUpdateUser}
+        />
         <PopupCreateCard isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}/>
         <PopupDeleteCard isOpen={isDeleteCardPopupOpen} onClose={closeAllPopups}/>
         <PopupImage 

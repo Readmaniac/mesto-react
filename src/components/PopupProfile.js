@@ -1,6 +1,36 @@
+import React, { useState } from "react"
 import PopupWithForm from "./PopupWithForm"
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function PopupProfile(props) {
+  const currentUser = React.useContext(CurrentUserContext);
+  const [name, setName] = useState(currentUser.name);
+  const [description, setDescription] = useState(currentUser.about);
+
+  React.useEffect(() => {
+    setName(currentUser.name);
+    setDescription(currentUser.about);
+  }, [currentUser]); 
+
+  function handleChangeName(e) {
+    setName(e.target.value);
+  }
+
+  function handleChangeAbout(e) {
+    setDescription(e.target.value);
+  }
+
+  function handleSubmit(e) {
+    // Запрещаем браузеру переходить по адресу формы
+    e.preventDefault();
+  
+    // Передаём значения управляемых компонентов во внешний обработчик
+    props.onUpdateUser({
+      name,
+      about: description,
+    });
+  } 
+
   return (
     <PopupWithForm 
       name="profile" 
@@ -19,6 +49,8 @@ function PopupProfile(props) {
         maxLength="40"
         title="Длина поля должна быть 2 и более символов и менее или равно 40"
         id="field-name"
+        value={name}
+        onChange={handleChangeName}
         required 
       />
       <span className="form__item-error form__item-error_field_name" ></span>
@@ -31,6 +63,8 @@ function PopupProfile(props) {
         maxLength="200"
         title="Длина поля должна быть 2 и более символов и менее или равно 200"
         id="field-job"
+        value={description}
+        onChange={handleChangeAbout}
         required 
       />
       <span className="form__item-error form__item-error_field_link" ></span>
