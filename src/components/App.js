@@ -12,12 +12,11 @@ import {CurrentUserContext} from '../contexts/CurrentUserContext';
 import avatar from '../images/Avatar.svg'
 
 function App() {
-
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
-  const [isDeleteCardPopupOpen, setisDeleteCardPopupOpen] = useState(false)
-  const [selectedCard, setSelectedCard] = useState({})
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isDeleteCardPopupOpen, setisDeleteCardPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
   const [cards, setCards] = useState([]);
   const [currentUser, setCurrentUser] = useState(
     {
@@ -25,7 +24,23 @@ function App() {
       about: "Исследователь",
       avatar: avatar
     }
-  )
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard;
+
+  useEffect(() => {
+    function closeByEscape(evt) {
+      if(evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+    if(isOpen) { // навешиваем только при открытии
+      document.addEventListener('keydown', closeByEscape);
+      return () => {
+        document.removeEventListener('keydown', closeByEscape);
+      }
+    }
+  }, [isOpen]) 
 
   React.useEffect(() => {
     Promise.all([api.getAllCards(), api.getUsersInfo()])
@@ -89,39 +104,42 @@ function App() {
   }
 //меняем инфо в профайле пользователя
   function handleUpdateUser(userInfoProfile) {
+    setIsLoading(true)
     api.setUserInfo(userInfoProfile)
       .then((userInfo) => {
         setCurrentUser(userInfo);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
-      });
-    closeAllPopups();
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
   }
 //меняем аватар
   function handleUpdateAvatar(avatarLink){
     api.editUserAvatar(avatarLink)
       .then((userInfo) => {
         setCurrentUser(userInfo);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
-      });
-    closeAllPopups();
+      })
   }
 //добавляем карточку
   function handleAddPlaceSubmit(card){
     api.addCard(card)
       .then((newCard) => {
         setCards((cardsList) => [newCard, ...cardsList])
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
       });
-    closeAllPopups();
   }
   
-
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
@@ -140,16 +158,19 @@ function App() {
           isOpen={isEditAvatarPopupOpen} 
           onClose={closeAllPopups} 
           onUpdateAvatar={handleUpdateAvatar}
+          isLoading={isLoading}
         />
         <EditProfilePopup 
           isOpen={isEditProfilePopupOpen} 
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
+          isLoading={isLoading}
         />
         <AddPlacePopup 
           isOpen={isAddPlacePopupOpen} 
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
+          isLoading={isLoading}
         />
         <PopupDeleteCard 
           isOpen={isDeleteCardPopupOpen} 

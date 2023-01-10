@@ -1,9 +1,15 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PopupWithForm from "./PopupWithForm"
+import { useForm } from "../hooks/useForm";
 
-function AddPlacePopup(props) {
+function AddPlacePopup({isOpen, onClose, isLoading, onAddPlace}) {
   const [cardName, setCardName] = useState('');
   const [cardLink, setCardLink] = useState('');
+
+  React.useEffect(() => {
+    setCardName('');
+    setCardLink('');
+  }, [isOpen]);
 
   function handleChangeCardName(e) {
     setCardName(e.target.value);
@@ -17,7 +23,7 @@ function AddPlacePopup(props) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
       // Передаём значения управляемых компонентов во внешний обработчик
-    props.onAddPlace({name: cardName, link: cardLink});
+    onAddPlace({name: cardName, link: cardLink});
   } 
 
   return (
@@ -25,9 +31,10 @@ function AddPlacePopup(props) {
       name="card" 
       title="Новое место" 
       buttonName="Создать" 
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      isOpen={isOpen}
+      onClose={onClose}
       onSubmit={handleSubmit}
+      isLoading={isLoading}
     >
       <input 
         type="text" 
