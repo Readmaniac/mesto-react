@@ -179,7 +179,6 @@ function App() {
         <PopupImage 
           onClose={closeAllPopups}
           card={selectedCard} 
-          handleCardClick={handleCardClick}
         />
       </CurrentUserContext.Provider>
     </div>
