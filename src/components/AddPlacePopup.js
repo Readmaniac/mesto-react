@@ -3,27 +3,18 @@ import PopupWithForm from "./PopupWithForm"
 import { useForm } from "../hooks/useForm";
 
 function AddPlacePopup({isOpen, onClose, isLoading, onAddPlace}) {
-  const [cardName, setCardName] = useState('');
-  const [cardLink, setCardLink] = useState('');
+
+  const {values, handleChange, setValues} = useForm({});
 
   React.useEffect(() => {
-    setCardName('');
-    setCardLink('');
+    setValues();
   }, [isOpen]);
-
-  function handleChangeCardName(e) {
-    setCardName(e.target.value);
-  }
-
-  function handleChangeCardLink(e) {
-    setCardLink(e.target.value);
-  }
 
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
       // Передаём значения управляемых компонентов во внешний обработчик
-    onAddPlace({name: cardName, link: cardLink});
+    onAddPlace({name: values.name, link: values.link});
   } 
 
   return (
@@ -45,8 +36,7 @@ function AddPlacePopup({isOpen, onClose, isLoading, onAddPlace}) {
         minLength="2"
         maxLength="30"
         title="Длина поля должна быть 2 и более символов и менее или равно 30"
-        value={cardName}
-        onChange={handleChangeCardName}
+        onChange={handleChange}
         required />
       <span className="form__item-error form__item-error_field_name" ></span>
       <input 
@@ -55,8 +45,7 @@ function AddPlacePopup({isOpen, onClose, isLoading, onAddPlace}) {
         className="form__input"
         name="link"
         tabIndex="4"
-        value={cardLink}
-        onChange={handleChangeCardLink}
+        onChange={handleChange}
         required 
       />
       <span className="form__item-error form__item-error_field_link" ></span>

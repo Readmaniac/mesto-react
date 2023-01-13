@@ -119,6 +119,7 @@ function App() {
   }
 //меняем аватар
   function handleUpdateAvatar(avatarLink){
+    // setIsLoading(true)
     api.editUserAvatar(avatarLink)
       .then((userInfo) => {
         setCurrentUser(userInfo);
@@ -127,9 +128,13 @@ function App() {
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
       })
+      // .finally(() => {
+      //   setIsLoading(false);
+      // })
   }
 //добавляем карточку
   function handleAddPlaceSubmit(card){
+    setIsLoading(true)
     api.addCard(card)
       .then((newCard) => {
         setCards((cardsList) => [newCard, ...cardsList])
@@ -137,7 +142,10 @@ function App() {
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
-      });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
   }
   
   return (
